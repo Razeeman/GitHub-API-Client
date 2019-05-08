@@ -2,8 +2,8 @@ package com.razeeman.showcase.githubapi
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.razeeman.showcase.githubapi.api.ApiService
-import com.razeeman.showcase.githubapi.api.model.SearchResponse
+import com.razeeman.showcase.githubapi.data.api.ApiService
+import com.razeeman.showcase.githubapi.data.api.model.SearchResponse
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback

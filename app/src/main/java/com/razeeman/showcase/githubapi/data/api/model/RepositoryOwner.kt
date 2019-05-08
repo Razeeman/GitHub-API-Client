@@ -1,4 +1,4 @@
-package com.razeeman.showcase.githubapi.api.model
+package com.razeeman.showcase.githubapi.data.api.model
 
 import com.google.gson.annotations.SerializedName
 
