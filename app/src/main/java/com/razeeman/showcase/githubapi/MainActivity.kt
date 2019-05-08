@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.razeeman.showcase.githubapi.data.api.ApiService
 import com.razeeman.showcase.githubapi.data.api.model.Repository
+import com.razeeman.showcase.githubapi.data.repo.RemoteRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -30,12 +31,13 @@ class MainActivity : AppCompatActivity() {
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
         val apiService = retrofit.create(ApiService::class.java)
+        val repository = RemoteRepository.get(apiService)
 
-        val disposable = apiService.findRepositories(baseQuery)
+        val disposable = repository.findRepositories(baseQuery)
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { updateView(it.items) },
+                { updateView(it) },
                 { showError(it.message) }
             )
 
