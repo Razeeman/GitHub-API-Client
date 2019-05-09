@@ -19,10 +19,16 @@ import javax.inject.Inject
  */
 class ReposActivity : AppCompatActivity() {
 
+    companion object {
+
+        const val BASE_QUERY = "test"
+
+    }
+
     @Inject
     lateinit var reposViewModel: BaseReposViewModel
 
-    private val compositeDisposable = CompositeDisposable()
+    private var compositeDisposable = CompositeDisposable()
     private val repoAdapter = RepoAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,9 +41,27 @@ class ReposActivity : AppCompatActivity() {
             adapter = repoAdapter
         }
 
-        val baseQuery = "test"
+    }
 
-        val disposable = reposViewModel.getRepos(baseQuery)
+    override fun onResume() {
+        super.onResume()
+        bindViewModel()
+    }
+
+    override fun onPause() {
+        unbindViewModel()
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        App.releaseReposComponent()
+        super.onDestroy()
+    }
+
+    private fun bindViewModel() {
+        compositeDisposable = CompositeDisposable()
+
+        val disposable = reposViewModel.getRepos(BASE_QUERY)
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -48,10 +72,8 @@ class ReposActivity : AppCompatActivity() {
         compositeDisposable.add(disposable)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    private fun unbindViewModel() {
         compositeDisposable.dispose()
-        App.releaseReposComponent()
     }
 
     private fun showItems(items: List<RepoItem>) {
