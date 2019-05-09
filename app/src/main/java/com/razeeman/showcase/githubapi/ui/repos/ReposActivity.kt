@@ -4,31 +4,30 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.razeeman.showcase.githubapi.App
 import com.razeeman.showcase.githubapi.R
-import com.razeeman.showcase.githubapi.data.api.ApiService
-import com.razeeman.showcase.githubapi.data.repo.RemoteRepository
 import com.razeeman.showcase.githubapi.ui.RepoAdapter
 import com.razeeman.showcase.githubapi.ui.model.RepoItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
 /**
  * Repository list view.
  */
 class ReposActivity : AppCompatActivity() {
 
-    private lateinit var reposViewModel: BaseReposViewModel
+    @Inject
+    lateinit var reposViewModel: BaseReposViewModel
 
     private val compositeDisposable = CompositeDisposable()
     private val repoAdapter = RepoAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        App.getReposComponent().inject(this)
         setContentView(R.layout.activity_main)
 
         main_items.apply {
@@ -36,17 +35,7 @@ class ReposActivity : AppCompatActivity() {
             adapter = repoAdapter
         }
 
-        val baseUrl = "https://api.github.com"
         val baseQuery = "test"
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
-        val apiService = retrofit.create(ApiService::class.java)
-        val repository = RemoteRepository.get(apiService)
-        reposViewModel = ReposViewModel(repository)
 
         val disposable = reposViewModel.getRepos(baseQuery)
             .subscribeOn(Schedulers.computation())
@@ -62,6 +51,7 @@ class ReposActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable.dispose()
+        App.releaseReposComponent()
     }
 
     private fun showItems(items: List<RepoItem>) {
