@@ -1,4 +1,4 @@
-package com.razeeman.showcase.githubapi.ui.main
+package com.razeeman.showcase.githubapi.ui.repos
 
 import android.os.Bundle
 import android.view.View
@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.razeeman.showcase.githubapi.R
 import com.razeeman.showcase.githubapi.data.api.ApiService
-import com.razeeman.showcase.githubapi.data.api.model.Repository
 import com.razeeman.showcase.githubapi.data.repo.RemoteRepository
 import com.razeeman.showcase.githubapi.ui.RepoAdapter
 import com.razeeman.showcase.githubapi.ui.model.RepoItem
@@ -18,7 +17,12 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MainActivity : AppCompatActivity() {
+/**
+ * Repository list view.
+ */
+class ReposActivity : AppCompatActivity() {
+
+    private lateinit var reposViewModel: BaseReposViewModel
 
     private val compositeDisposable = CompositeDisposable()
     private val repoAdapter = RepoAdapter()
@@ -42,8 +46,9 @@ class MainActivity : AppCompatActivity() {
             .build()
         val apiService = retrofit.create(ApiService::class.java)
         val repository = RemoteRepository.get(apiService)
+        reposViewModel = ReposViewModel(repository)
 
-        val disposable = repository.findRepositories(baseQuery)
+        val disposable = reposViewModel.getRepos(baseQuery)
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -59,16 +64,11 @@ class MainActivity : AppCompatActivity() {
         compositeDisposable.dispose()
     }
 
-    private fun showItems(repos: List<Repository>) {
+    private fun showItems(items: List<RepoItem>) {
         main_items.visibility = View.VISIBLE
         main_error.visibility = View.INVISIBLE
 
-        val newItems = ArrayList<RepoItem>()
-        for (repository in repos) {
-            newItems.add(RepoItem.fromRepository(repository))
-        }
-
-        repoAdapter.replaceItems(newItems)
+        repoAdapter.replaceItems(items)
     }
 
     private fun showError(message: String?) {
