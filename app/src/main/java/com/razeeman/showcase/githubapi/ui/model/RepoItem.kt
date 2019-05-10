@@ -13,7 +13,7 @@ data class RepoItem (
     val description : String,
     val url : String,
     val stargazers_count : Int,
-    val language : String,
+    val language : String?,
     val forks_count : Int
 
 ) {

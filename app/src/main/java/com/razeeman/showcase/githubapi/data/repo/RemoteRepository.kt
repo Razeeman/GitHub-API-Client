@@ -2,7 +2,7 @@ package com.razeeman.showcase.githubapi.data.repo
 
 import com.razeeman.showcase.githubapi.data.api.ApiService
 import com.razeeman.showcase.githubapi.data.api.model.Repository
-import io.reactivex.Observable
+import io.reactivex.Single
 
 /**
  * Implementation of the repository that works with remote data.
@@ -29,7 +29,7 @@ private constructor(private val apiService: ApiService)
 
     }
 
-    override fun findRepositories(query: String): Observable<List<Repository>> {
+    override fun findRepositories(query: String): Single<List<Repository>> {
         return apiService.findRepositories(query)
             .map { it.items }
     }

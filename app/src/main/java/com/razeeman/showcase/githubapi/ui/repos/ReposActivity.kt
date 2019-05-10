@@ -44,7 +44,6 @@ class ReposActivity : AppCompatActivity() {
         }
 
         setUpRefreshLayout()
-
     }
 
     override fun onResume() {
@@ -65,14 +64,14 @@ class ReposActivity : AppCompatActivity() {
     private fun setUpRefreshLayout() {
         refresh_layout.apply {
             setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
-            setOnRefreshListener { manualUpdate() }
+            setOnRefreshListener { reposViewModel.getRepos(BASE_QUERY) }
         }
     }
 
     private fun bindViewModel() {
         compositeDisposable = CompositeDisposable()
 
-        compositeDisposable.add(reposViewModel.getRepos(BASE_QUERY)
+        compositeDisposable.add(reposViewModel.getReposSubject()
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -80,13 +79,15 @@ class ReposActivity : AppCompatActivity() {
                 { showError(it.message) }
             ))
 
-        compositeDisposable.add(reposViewModel.getLoadingVisibility()
+        compositeDisposable.add(reposViewModel.getLoadingIndicatorSubject()
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { setLoadingVisibility(it) },
                 { Log.d(TAG, "Error showing loading indicator", it) }
             ))
+
+        reposViewModel.getRepos(BASE_QUERY)
     }
 
     private fun unbindViewModel() {
@@ -111,7 +112,4 @@ class ReposActivity : AppCompatActivity() {
         refresh_layout.isRefreshing = visibility
     }
 
-    private fun manualUpdate() {
-        reposViewModel.refreshRepos(BASE_QUERY)
-    }
 }
