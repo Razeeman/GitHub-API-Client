@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.razeeman.showcase.githubapi.App
 import com.razeeman.showcase.githubapi.R
@@ -39,6 +40,7 @@ class ReposActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         main_items.apply {
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             layoutManager = LinearLayoutManager(context)
             adapter = repoAdapter
         }
