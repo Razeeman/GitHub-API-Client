@@ -1,6 +1,7 @@
 package com.razeeman.showcase.githubapi.ui.repos
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +22,7 @@ class ReposActivity : AppCompatActivity() {
 
     companion object {
 
+        const val TAG = "custom tag"
         const val BASE_QUERY = "test"
 
     }
@@ -41,6 +43,8 @@ class ReposActivity : AppCompatActivity() {
             adapter = repoAdapter
         }
 
+        setUpRefreshLayout()
+
     }
 
     override fun onResume() {
@@ -58,18 +62,31 @@ class ReposActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    private fun setUpRefreshLayout() {
+        refresh_layout.apply {
+            setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
+            setOnRefreshListener { manualUpdate() }
+        }
+    }
+
     private fun bindViewModel() {
         compositeDisposable = CompositeDisposable()
 
-        val disposable = reposViewModel.getRepos(BASE_QUERY)
+        compositeDisposable.add(reposViewModel.getRepos(BASE_QUERY)
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { showItems(it) },
                 { showError(it.message) }
-            )
+            ))
 
-        compositeDisposable.add(disposable)
+        compositeDisposable.add(reposViewModel.getLoadingVisibility()
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { setLoadingVisibility(it) },
+                { Log.d(TAG, "Error showing loading indicator", it) }
+            ))
     }
 
     private fun unbindViewModel() {
@@ -88,5 +105,13 @@ class ReposActivity : AppCompatActivity() {
         main_error.visibility = View.VISIBLE
 
         main_error.text = message
+    }
+
+    private fun setLoadingVisibility(visibility: Boolean) {
+        refresh_layout.isRefreshing = visibility
+    }
+
+    private fun manualUpdate() {
+        reposViewModel.refreshRepos(BASE_QUERY)
     }
 }
