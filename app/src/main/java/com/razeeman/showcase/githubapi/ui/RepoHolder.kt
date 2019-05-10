@@ -20,6 +20,8 @@ class RepoHolder(inflater: LayoutInflater, private val parent: ViewGroup)
         itemView.apply {
             repo_name.text = repoItem.name
             repo_description.text = repoItem.description
+            repo_star_count.text = repoItem.stargazers_count.toString()
+            repo_language.text = repoItem.language
         }
     }
 

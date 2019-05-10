@@ -1,24 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp">
 
     <TextView
             android:id="@+id/repo_name"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@android:color/primary_text_light"
-            android:textSize="20sp"
-            tools:text="Repo Name"/>
+            android:textSize="22sp"
+            tools:text="Repo Name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+            android:id="@+id/repo_star_image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_star"
+            app:layout_constraintTop_toTopOf="@+id/repo_star_count"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintBottom_toBottomOf="@+id/repo_star_count"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+            android:id="@+id/repo_star_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="123"
+            app:layout_constraintTop_toBottomOf="@+id/repo_description"
+            app:layout_constraintStart_toEndOf="@+id/repo_star_image"
+            android:layout_marginTop="16dp"/>
+
+    <TextView
+            android:id="@+id/repo_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Java"
+            app:layout_constraintTop_toBottomOf="@+id/repo_description"
+            app:layout_constraintStart_toEndOf="@+id/repo_star_count"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"/>
 
     <TextView
             android:id="@+id/repo_description"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="Repo Description"/>
+            tools:text="Repo Description"
+            app:layout_constraintTop_toBottomOf="@+id/repo_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
