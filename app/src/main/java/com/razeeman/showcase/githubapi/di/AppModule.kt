@@ -3,7 +3,11 @@ package com.razeeman.showcase.githubapi.di
 import android.content.Context
 import com.razeeman.showcase.githubapi.App
 import com.razeeman.showcase.githubapi.data.api.ApiService
+import com.razeeman.showcase.githubapi.data.db.DaoMaster
+import com.razeeman.showcase.githubapi.data.db.RepoDbDao
 import com.razeeman.showcase.githubapi.data.repo.BaseRepository
+import com.razeeman.showcase.githubapi.data.repo.LocalRepository
+import com.razeeman.showcase.githubapi.data.repo.MainRepository
 import com.razeeman.showcase.githubapi.data.repo.RemoteRepository
 import dagger.Module
 import dagger.Provides
@@ -53,8 +57,29 @@ class AppModule(application: App) {
 
     @Provides
     @Singleton
-    fun getBaseRepository(apiService: ApiService): BaseRepository {
+    fun getDao(): RepoDbDao {
+        // DevOpenHelper will drop all tables on schema changes in onUpgrade().
+        val helper = DaoMaster.DevOpenHelper(appContext, "repos-db")
+        val db = helper.writableDb
+        return DaoMaster(db).newSession().repoDbDao
+    }
+
+    @Provides
+    @Singleton
+    fun getLocalRepository(repositoryDao: RepoDbDao): LocalRepository {
+        return LocalRepository.get(repositoryDao)
+    }
+
+    @Provides
+    @Singleton
+    fun getRemoteRepository(apiService: ApiService): RemoteRepository {
         return RemoteRepository.get(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun getBaseRepository(localRepository: LocalRepository, remoteRepository: RemoteRepository): BaseRepository {
+        return MainRepository.get(localRepository, remoteRepository)
     }
 
 }

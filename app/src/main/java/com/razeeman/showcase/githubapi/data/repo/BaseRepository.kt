@@ -1,6 +1,7 @@
 package com.razeeman.showcase.githubapi.data.repo
 
-import com.razeeman.showcase.githubapi.data.api.model.Repository
+import com.razeeman.showcase.githubapi.data.db.RepoDb
+import io.reactivex.Completable
 import io.reactivex.Single
 
 /**
@@ -8,6 +9,8 @@ import io.reactivex.Single
  */
 interface BaseRepository {
 
-    fun findRepositories(query: String): Single<List<Repository>>
+    fun getRepos(query: String): Single<List<RepoDb>>
+
+    fun refreshRepos(query: String): Completable
 
 }

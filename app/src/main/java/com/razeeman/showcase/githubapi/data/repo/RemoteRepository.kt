@@ -1,19 +1,18 @@
 package com.razeeman.showcase.githubapi.data.repo
 
 import com.razeeman.showcase.githubapi.data.api.ApiService
-import com.razeeman.showcase.githubapi.data.api.model.Repository
+import com.razeeman.showcase.githubapi.data.api.model.RepoApi
 import io.reactivex.Single
 
 /**
  * Implementation of the repository that works with remote data.
  */
 class RemoteRepository
-private constructor(private val apiService: ApiService)
-    : BaseRepository {
+private constructor(private val apiService: ApiService) {
 
     companion object {
 
-        // Repository singleton instance.
+        // RepoDb singleton instance.
         @Volatile private var INSTANCE: RemoteRepository? = null
 
         /**
@@ -26,10 +25,9 @@ private constructor(private val apiService: ApiService)
                 INSTANCE ?: RemoteRepository(apiService).also { INSTANCE = it }
             }
         }
-
     }
 
-    override fun findRepositories(query: String): Single<List<Repository>> {
+    fun getAll(query: String): Single<List<RepoApi>> {
         return apiService.findRepositories(query)
             .map { it.items }
     }

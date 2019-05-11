@@ -9,6 +9,6 @@ data class RepositorySearchResponse (
 
     @SerializedName("total_count") val total_count : Int,
     @SerializedName("incomplete_results") val incomplete_results : Boolean,
-    @SerializedName("items") val items : List<Repository>
+    @SerializedName("items") val items : List<RepoApi>
 
 )

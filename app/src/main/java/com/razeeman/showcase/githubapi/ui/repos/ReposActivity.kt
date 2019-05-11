@@ -46,6 +46,8 @@ class ReposActivity : AppCompatActivity() {
         }
 
         setUpRefreshLayout()
+
+        refreshData(BASE_QUERY)
     }
 
     override fun onResume() {
@@ -66,7 +68,9 @@ class ReposActivity : AppCompatActivity() {
     private fun setUpRefreshLayout() {
         refresh_layout.apply {
             setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
-            setOnRefreshListener { reposViewModel.getRepos(BASE_QUERY) }
+            setOnRefreshListener {
+                refreshData(BASE_QUERY)
+            }
         }
     }
 
@@ -94,6 +98,13 @@ class ReposActivity : AppCompatActivity() {
 
     private fun unbindViewModel() {
         compositeDisposable.dispose()
+    }
+
+    private fun refreshData(query: String) {
+        compositeDisposable.add(reposViewModel.refreshRepos(query)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe())
     }
 
     private fun showItems(items: List<RepoItem>) {

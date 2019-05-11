@@ -1,35 +1,39 @@
 package com.razeeman.showcase.githubapi.ui.model
 
-import com.razeeman.showcase.githubapi.data.api.model.Repository
+import com.razeeman.showcase.githubapi.data.api.model.RepoApi
+import com.razeeman.showcase.githubapi.data.db.RepoDb
 
 /**
  * Model class to represent repository shown in ui.
  */
 data class RepoItem (
 
-    val id : Int,
-    val name : String,
-    val html_url : String,
-    val description : String,
-    val url : String,
-    val stargazers_count : Int,
+    val name : String?,
+    val description : String?,
+    val stargazers_count : Int?,
     val language : String?,
-    val forks_count : Int
+    val forks_count : Int?
 
 ) {
 
     companion object {
 
-        fun fromRepository(repository: Repository): RepoItem {
+        fun fromApiRepo(apiRepo: RepoApi): RepoItem {
             return RepoItem(
-                repository.id,
-                repository.name,
-                repository.html_url,
-                repository.description,
-                repository.url,
-                repository.stargazers_count,
-                repository.language,
-                repository.forks_count)
+                apiRepo.name,
+                apiRepo.description,
+                apiRepo.stargazers_count,
+                apiRepo.language,
+                apiRepo.forks_count)
+        }
+
+        fun fromDbRep(dbRepo: RepoDb): RepoItem {
+            return RepoItem(
+                dbRepo.name,
+                dbRepo.description,
+                dbRepo.stargazers_count,
+                dbRepo.language,
+                dbRepo.forks_count)
         }
 
     }
