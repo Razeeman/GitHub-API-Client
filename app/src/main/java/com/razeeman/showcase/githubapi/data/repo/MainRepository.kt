@@ -15,7 +15,7 @@ private constructor(private val localRepository: LocalRepository,
 
     companion object {
 
-        // RepoDb singleton instance.
+        // Repository singleton instance.
         @Volatile private var INSTANCE: MainRepository? = null
 
         /**
@@ -37,7 +37,7 @@ private constructor(private val localRepository: LocalRepository,
             localRepository.getAll(),
             remoteRepository.getAll(query)
                 .map {
-                    it.map { apiRepo -> RepoDb.fromApiRepository(apiRepo) }
+                    it.map { repoApi -> RepoDb.fromRepoApi(repoApi) }
                 })
             .filter { it.isNotEmpty() }
             .firstElement()
@@ -49,7 +49,7 @@ private constructor(private val localRepository: LocalRepository,
             .subscribeOn(Schedulers.io())
             .doOnSuccess {
                 localRepository.deleteAll().subscribe()
-                localRepository.saveAll(it.map { repoApi -> RepoDb.fromApiRepository(repoApi) }).subscribe()
+                localRepository.saveAll(it.map { repoApi -> RepoDb.fromRepoApi(repoApi) }).subscribe()
             }
             .ignoreElement()
     }

@@ -18,22 +18,22 @@ data class RepoItem (
 
     companion object {
 
-        fun fromApiRepo(apiRepo: RepoApi): RepoItem {
+        fun fromRepoApi(repoApi: RepoApi): RepoItem {
             return RepoItem(
-                apiRepo.name,
-                apiRepo.description,
-                apiRepo.stargazers_count,
-                apiRepo.language,
-                apiRepo.forks_count)
+                repoApi.name,
+                repoApi.description,
+                repoApi.stargazers_count,
+                repoApi.language,
+                repoApi.forks_count)
         }
 
-        fun fromDbRep(dbRepo: RepoDb): RepoItem {
+        fun fromRepoDb(repoDb: RepoDb): RepoItem {
             return RepoItem(
-                dbRepo.name,
-                dbRepo.description,
-                dbRepo.stargazers_count,
-                dbRepo.language,
-                dbRepo.forks_count)
+                repoDb.name,
+                repoDb.description,
+                repoDb.stargazers_count,
+                repoDb.language,
+                repoDb.forks_count)
         }
 
     }

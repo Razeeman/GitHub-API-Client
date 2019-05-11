@@ -32,7 +32,7 @@ class ReposViewModel
         repository.getRepos(query)
             .subscribeOn(Schedulers.io())
             .map {
-                it.map { repo -> RepoItem.fromDbRep(repo) }
+                it.map { repoDb -> RepoItem.fromRepoDb(repoDb) }
             }
             .doOnSubscribe { loadingIndicatorSubject.onNext(true) }
             .doOnSuccess { reposSubject.onNext(it) }

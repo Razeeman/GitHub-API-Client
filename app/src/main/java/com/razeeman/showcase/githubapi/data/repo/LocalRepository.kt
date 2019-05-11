@@ -13,7 +13,7 @@ private constructor(private val repositoryDao: RepoDbDao) {
 
     companion object {
 
-        // RepoDb singleton instance.
+        // Repository singleton instance.
         @Volatile private var INSTANCE: LocalRepository? = null
 
         /**

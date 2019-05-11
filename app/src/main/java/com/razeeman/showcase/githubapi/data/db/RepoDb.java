@@ -1,5 +1,6 @@
 package com.razeeman.showcase.githubapi.data.db;
 
+import com.razeeman.showcase.githubapi.data.api.model.RepoApi;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Property;
@@ -36,17 +37,17 @@ public class RepoDb {
     public RepoDb() {
     }
 
-    public static RepoDb fromApiRepository(com.razeeman.showcase.githubapi.data.api.model.RepoApi apiRepoApi) {
+    public static RepoDb fromRepoApi(RepoApi repoApi) {
         RepoDb dbRepoDb = new RepoDb();
 
-        dbRepoDb.setName(apiRepoApi.getName());
-        dbRepoDb.setOwner_login(apiRepoApi.getOwner().getLogin());
-        dbRepoDb.setHtml_url(apiRepoApi.getHtml_url());
-        dbRepoDb.setDescription(apiRepoApi.getDescription());
-        dbRepoDb.setUrl(apiRepoApi.getUrl());
-        dbRepoDb.setStargazers_count(apiRepoApi.getStargazers_count());
-        dbRepoDb.setLanguage(apiRepoApi.getLanguage());
-        dbRepoDb.setForks_count(apiRepoApi.getForks_count());
+        dbRepoDb.setName(repoApi.getName());
+        dbRepoDb.setOwner_login(repoApi.getOwner().getLogin());
+        dbRepoDb.setHtml_url(repoApi.getHtml_url());
+        dbRepoDb.setDescription(repoApi.getDescription());
+        dbRepoDb.setUrl(repoApi.getUrl());
+        dbRepoDb.setStargazers_count(repoApi.getStargazers_count());
+        dbRepoDb.setLanguage(repoApi.getLanguage());
+        dbRepoDb.setForks_count(repoApi.getForks_count());
 
         return dbRepoDb;
     }

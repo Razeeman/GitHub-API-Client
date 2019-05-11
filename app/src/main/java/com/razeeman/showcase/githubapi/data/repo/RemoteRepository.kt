@@ -12,7 +12,7 @@ private constructor(private val apiService: ApiService) {
 
     companion object {
 
-        // RepoDb singleton instance.
+        // Repository singleton instance.
         @Volatile private var INSTANCE: RemoteRepository? = null
 
         /**
