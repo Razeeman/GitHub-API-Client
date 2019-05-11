@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 /**
  * Data class for converting Json response.
  */
-data class RepositoryLicense (
+data class RepoLicense (
 
     @SerializedName("key") val key : String,
     @SerializedName("name") val name : String,
