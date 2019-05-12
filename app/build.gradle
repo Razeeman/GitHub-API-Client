@@ -22,6 +22,19 @@ android {
     }
 }
 
+greendao {
+    schemaVersion 1
+    targetGenDir 'src/main/java'
+}
+
+// Moving greendao plugin before kotlin plugin allows greendao gradle task to run first and generate
+// necessary classes. But adding targetGenDir again breaks this, so manual reordering is needed.
+tasks.whenTaskAdded { task ->
+    if (task.name == 'kaptDebugKotlin') {
+        task.dependsOn tasks.getByName('greendao')
+    }
+}
+
 //  Dependency versions are defined in the top level build.gradle file.
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
