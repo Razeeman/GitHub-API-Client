@@ -15,7 +15,7 @@
             android:theme="@style/AppTheme"
             android:name=".App"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.repos.ReposActivity">
+        <activity android:name=".ui.search.SearchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

@@ -10,6 +10,6 @@ import javax.inject.Singleton
 @Component(modules = [AppModule::class])
 interface AppComponent {
 
-    fun plusReposComponent(reposModule: ReposModule): ReposComponent
+    fun plusSearchComponent(searchModule: SearchModule): SearchComponent
 
 }

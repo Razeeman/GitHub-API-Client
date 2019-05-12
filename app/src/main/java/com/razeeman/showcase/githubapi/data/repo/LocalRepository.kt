@@ -9,7 +9,7 @@ import io.reactivex.Single
  * Implementation of the repository that works with local data.
  */
 class LocalRepository
-private constructor(private val repositoryDao: RepoDbDao) {
+private constructor(private val dao: RepoDbDao) {
 
     companion object {
 
@@ -19,25 +19,25 @@ private constructor(private val repositoryDao: RepoDbDao) {
         /**
          * Provides repository instance.
          *
-         * @param repositoryDao dao to access database.
+         * @param dao dao to access database.
          */
-        fun get(repositoryDao: RepoDbDao): LocalRepository {
+        fun get(dao: RepoDbDao): LocalRepository {
             return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: LocalRepository(repositoryDao).also { INSTANCE = it }
+                INSTANCE ?: LocalRepository(dao).also { INSTANCE = it }
             }
         }
     }
 
     fun saveAll(repositories: List<RepoDb>): Completable {
-        return Completable.fromCallable { repositoryDao.insertInTx(repositories) }
+        return Completable.fromCallable { dao.insertInTx(repositories) }
     }
 
     fun getAll(): Single<List<RepoDb>> {
-        return Single.fromCallable { repositoryDao.loadAll() }
+        return Single.fromCallable { dao.loadAll() }
     }
 
     fun deleteAll(): Completable {
-        return Completable.fromCallable { repositoryDao.deleteAll() }
+        return Completable.fromCallable { dao.deleteAll() }
     }
 
 }

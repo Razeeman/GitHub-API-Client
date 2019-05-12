@@ -8,7 +8,7 @@ import io.reactivex.Single
  * Implementation of the repository that works with remote data.
  */
 class RemoteRepository
-private constructor(private val apiService: ApiService) {
+private constructor(private val api: ApiService) {
 
     companion object {
 
@@ -18,17 +18,17 @@ private constructor(private val apiService: ApiService) {
         /**
          * Provides repository instance.
          *
-         * @param apiService service to provide remote data.
+         * @param api service to provide remote data.
          */
-        fun get(apiService: ApiService): RemoteRepository {
+        fun get(api: ApiService): RemoteRepository {
             return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: RemoteRepository(apiService).also { INSTANCE = it }
+                INSTANCE ?: RemoteRepository(api).also { INSTANCE = it }
             }
         }
     }
 
     fun getAll(query: String): Single<List<RepoApi>> {
-        return apiService.findRepositories(query)
+        return api.findRepos(query)
             .map { it.items }
     }
 

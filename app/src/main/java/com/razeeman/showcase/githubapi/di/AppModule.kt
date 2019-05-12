@@ -66,14 +66,14 @@ class AppModule(application: App) {
 
     @Provides
     @Singleton
-    fun getLocalRepository(repositoryDao: RepoDbDao): LocalRepository {
-        return LocalRepository.get(repositoryDao)
+    fun getLocalRepository(dao: RepoDbDao): LocalRepository {
+        return LocalRepository.get(dao)
     }
 
     @Provides
     @Singleton
-    fun getRemoteRepository(apiService: ApiService): RemoteRepository {
-        return RemoteRepository.get(apiService)
+    fun getRemoteRepository(api: ApiService): RemoteRepository {
+        return RemoteRepository.get(api)
     }
 
     @Provides

@@ -1,4 +1,4 @@
-package com.razeeman.showcase.githubapi.ui.repos
+package com.razeeman.showcase.githubapi.ui.search
 
 import android.os.Bundle
 import android.util.Log
@@ -17,9 +17,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 /**
- * Repository list view.
+ * Repository search view.
  */
-class ReposActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity() {
 
     companion object {
 
@@ -29,14 +29,14 @@ class ReposActivity : AppCompatActivity() {
     }
 
     @Inject
-    lateinit var reposViewModel: BaseReposViewModel
+    lateinit var searchViewModel: BaseSearchViewModel
 
     private var compositeDisposable = CompositeDisposable()
     private val repoAdapter = RepoAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        App.getReposComponent().inject(this)
+        App.getSearchComponent().inject(this)
         setContentView(R.layout.activity_main)
 
         main_items.apply {
@@ -61,7 +61,7 @@ class ReposActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        App.releaseReposComponent()
+        App.releaseSearchComponent()
         super.onDestroy()
     }
 
@@ -77,7 +77,7 @@ class ReposActivity : AppCompatActivity() {
     private fun bindViewModel() {
         compositeDisposable = CompositeDisposable()
 
-        compositeDisposable.add(reposViewModel.getReposSubject()
+        compositeDisposable.add(searchViewModel.getReposSubject()
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -85,7 +85,7 @@ class ReposActivity : AppCompatActivity() {
                 { showError(it.message) }
             ))
 
-        compositeDisposable.add(reposViewModel.getLoadingIndicatorSubject()
+        compositeDisposable.add(searchViewModel.getLoadingIndicatorSubject()
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -93,7 +93,7 @@ class ReposActivity : AppCompatActivity() {
                 { Log.d(TAG, "Error showing loading indicator", it) }
             ))
 
-        reposViewModel.getRepos(BASE_QUERY)
+        searchViewModel.getRepos(BASE_QUERY)
     }
 
     private fun unbindViewModel() {
@@ -101,7 +101,7 @@ class ReposActivity : AppCompatActivity() {
     }
 
     private fun refreshData(query: String) {
-        compositeDisposable.add(reposViewModel.refreshRepos(query)
+        compositeDisposable.add(searchViewModel.refreshRepos(query)
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe())

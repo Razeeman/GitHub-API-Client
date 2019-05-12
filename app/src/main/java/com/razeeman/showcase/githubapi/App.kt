@@ -8,20 +8,20 @@ class App: Application() {
     companion object {
 
         private lateinit var appComponent: AppComponent
-        private var reposComponent: ReposComponent? = null
+        private var searchComponent: SearchComponent? = null
 
         private fun getAppComponent(): AppComponent {
             return appComponent
         }
 
-        fun getReposComponent(): ReposComponent {
-            return reposComponent ?: getAppComponent().plusReposComponent(ReposModule()).also {
-                reposComponent = it
+        fun getSearchComponent(): SearchComponent {
+            return searchComponent ?: getAppComponent().plusSearchComponent(SearchModule()).also {
+                searchComponent = it
             }
         }
 
-        fun releaseReposComponent() {
-            reposComponent = null
+        fun releaseSearchComponent() {
+            searchComponent = null
         }
 
     }

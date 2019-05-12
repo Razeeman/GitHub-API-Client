@@ -1,4 +1,4 @@
-package com.razeeman.showcase.githubapi.ui.repos
+package com.razeeman.showcase.githubapi.ui.search
 
 import com.razeeman.showcase.githubapi.data.repo.BaseRepository
 import com.razeeman.showcase.githubapi.di.ActivityScoped
@@ -10,12 +10,12 @@ import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
 /**
- * ViewModel for repository view.
+ * ViewModel for repository search view.
  */
 @ActivityScoped
-class ReposViewModel
+class SearchViewModel
 @Inject constructor(private val repository: BaseRepository)
-    : BaseReposViewModel {
+    : BaseSearchViewModel {
 
     private val reposSubject = BehaviorSubject.create<List<RepoItem>>()
     private val loadingIndicatorSubject = BehaviorSubject.createDefault(false)
