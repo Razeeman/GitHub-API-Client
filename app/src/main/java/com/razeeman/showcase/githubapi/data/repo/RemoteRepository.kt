@@ -3,6 +3,7 @@ package com.razeeman.showcase.githubapi.data.repo
 import com.razeeman.showcase.githubapi.data.api.ApiService
 import com.razeeman.showcase.githubapi.data.api.model.RepoApi
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Implementation of the repository that works with remote data.
@@ -29,6 +30,7 @@ private constructor(private val api: ApiService) {
 
     fun getAll(query: String): Single<List<RepoApi>> {
         return api.findRepos(query)
+            .subscribeOn(Schedulers.io())
             .map { it.items }
     }
 

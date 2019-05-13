@@ -46,6 +46,7 @@ class SearchActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
+        // Setting up recycler view.
         main_items.apply {
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             layoutManager = LinearLayoutManager(context)
@@ -56,7 +57,7 @@ class SearchActivity : AppCompatActivity() {
 
         baseQuery = savedInstanceState?.getString(BASE_QUERY_STATE_KEY) ?: baseQuery
 
-        refreshData(baseQuery)
+        searchViewModel.getRepos(baseQuery)
     }
 
     override fun onResume() {
@@ -131,8 +132,6 @@ class SearchActivity : AppCompatActivity() {
                 { setLoadingVisibility(it) },
                 { Log.d(TAG, "Error showing loading indicator", it) }
             ))
-
-        searchViewModel.getRepos(baseQuery)
     }
 
     private fun unbindViewModel() {

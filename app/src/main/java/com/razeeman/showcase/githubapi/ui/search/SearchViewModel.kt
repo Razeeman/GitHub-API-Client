@@ -42,7 +42,6 @@ class SearchViewModel
 
     override fun refreshRepos(query: String): Completable {
         return repository.refreshRepos(query)
-            .subscribeOn(Schedulers.io())
             .doOnSubscribe { loadingIndicatorSubject.onNext(true) }
             .doFinally { getRepos(query) }
     }

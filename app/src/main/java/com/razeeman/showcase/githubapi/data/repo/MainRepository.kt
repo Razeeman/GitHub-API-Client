@@ -3,7 +3,6 @@ package com.razeeman.showcase.githubapi.data.repo
 import com.razeeman.showcase.githubapi.data.db.RepoDb
 import io.reactivex.Completable
 import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
 
 /**
  * Implementation of the main repository that works with local and remote data.
@@ -46,11 +45,11 @@ private constructor(private val localRepository: LocalRepository,
 
     override fun refreshRepos(query: String): Completable {
         return remoteRepository.getAll(query)
-            .subscribeOn(Schedulers.io())
-            .doOnSuccess {
-                localRepository.deleteAll().subscribe()
-                localRepository.saveAll(it.map { repoApi -> RepoDb.fromRepoApi(repoApi) }).subscribe()
+            .flatMapCompletable {
+                localRepository.deleteAll()
+                .andThen(localRepository.saveAll(it.map {
+                        repoApi -> RepoDb.fromRepoApi(repoApi)
+                }))
             }
-            .ignoreElement()
     }
 }
