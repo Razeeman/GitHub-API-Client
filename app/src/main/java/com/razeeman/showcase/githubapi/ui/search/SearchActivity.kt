@@ -26,15 +26,14 @@ import javax.inject.Inject
 class SearchActivity : AppCompatActivity() {
 
     companion object {
-
-        const val TAG = "custom tag"
-        const val BASE_QUERY = "test"
-
+        private const val BASE_QUERY_STATE_KEY = "base_query_state_key"
+        private const val TAG = "CUSTOM TAG"
     }
 
     @Inject
     lateinit var searchViewModel: BaseSearchViewModel
 
+    private var baseQuery = "github api client"
     private var compositeDisposable = CompositeDisposable()
     private val repoAdapter = RepoAdapter()
 
@@ -55,7 +54,9 @@ class SearchActivity : AppCompatActivity() {
 
         setUpRefreshLayout()
 
-        refreshData(BASE_QUERY)
+        baseQuery = savedInstanceState?.getString(BASE_QUERY_STATE_KEY) ?: baseQuery
+
+        refreshData(baseQuery)
     }
 
     override fun onResume() {
@@ -66,6 +67,11 @@ class SearchActivity : AppCompatActivity() {
     override fun onPause() {
         unbindViewModel()
         super.onPause()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString(BASE_QUERY_STATE_KEY, baseQuery)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onDestroy() {
@@ -86,7 +92,8 @@ class SearchActivity : AppCompatActivity() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null) {
-                    refreshData(query)
+                    baseQuery = query
+                    refreshData(baseQuery)
                     searchItem.collapseActionView()
                 }
                 return false
@@ -101,7 +108,7 @@ class SearchActivity : AppCompatActivity() {
         refresh_layout.apply {
             setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
             setOnRefreshListener {
-                refreshData(BASE_QUERY)
+                refreshData(baseQuery)
             }
         }
     }
@@ -125,7 +132,7 @@ class SearchActivity : AppCompatActivity() {
                 { Log.d(TAG, "Error showing loading indicator", it) }
             ))
 
-        searchViewModel.getRepos(BASE_QUERY)
+        searchViewModel.getRepos(baseQuery)
     }
 
     private fun unbindViewModel() {
