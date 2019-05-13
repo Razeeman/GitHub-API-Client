@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GitHub API Client</string>
+    <string name="action_search">Search</string>
 </resources>
