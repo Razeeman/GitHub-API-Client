@@ -2,8 +2,11 @@ package com.razeeman.showcase.githubapi.ui.search
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.razeeman.showcase.githubapi.App
@@ -39,6 +42,10 @@ class SearchActivity : AppCompatActivity() {
         App.getSearchComponent().inject(this)
         setContentView(R.layout.activity_main)
 
+        // Setting up the toolbar.
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
         main_items.apply {
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             layoutManager = LinearLayoutManager(context)
@@ -63,6 +70,15 @@ class SearchActivity : AppCompatActivity() {
     override fun onDestroy() {
         App.releaseSearchComponent()
         super.onDestroy()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.search_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setUpRefreshLayout() {
