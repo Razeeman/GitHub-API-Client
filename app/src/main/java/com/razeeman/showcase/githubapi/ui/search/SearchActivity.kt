@@ -16,7 +16,6 @@ import com.razeeman.showcase.githubapi.ui.RepoAdapter
 import com.razeeman.showcase.githubapi.ui.model.RepoItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
@@ -118,7 +117,6 @@ class SearchActivity : AppCompatActivity() {
         compositeDisposable = CompositeDisposable()
 
         compositeDisposable.add(searchViewModel.getReposSubject()
-            .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { showItems(it) },
@@ -126,7 +124,6 @@ class SearchActivity : AppCompatActivity() {
             ))
 
         compositeDisposable.add(searchViewModel.getLoadingIndicatorSubject()
-            .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { setLoadingVisibility(it) },
@@ -140,7 +137,6 @@ class SearchActivity : AppCompatActivity() {
 
     private fun refreshData(query: String) {
         compositeDisposable.add(searchViewModel.refreshRepos(query)
-            .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe())
     }

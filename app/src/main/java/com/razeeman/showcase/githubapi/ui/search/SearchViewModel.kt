@@ -30,7 +30,7 @@ class SearchViewModel
 
     override fun getRepos(query: String) {
         repository.getRepos(query)
-            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.computation())
             .map {
                 it.map { repoDb -> RepoItem.fromRepoDb(repoDb) }
             }
