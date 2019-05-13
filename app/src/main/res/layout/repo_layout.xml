@@ -7,6 +7,19 @@
         android:layout_height="wrap_content"
         android:padding="8dp">
 
+    <View
+            android:id="@+id/repo_circle"
+            android:layout_width="0dp"
+            android:layout_height="10dp"
+            android:background="@drawable/circle"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="@+id/repo_star_image"
+            app:layout_constraintTop_toTopOf="@+id/repo_name"
+            app:layout_constraintBottom_toBottomOf="@+id/repo_name"
+            app:layout_constraintEnd_toEndOf="@+id/repo_star_image"
+            app:layout_constraintDimensionRatio="1:1"
+    />
+
     <TextView
             android:id="@+id/repo_name"
             android:layout_width="0dp"
@@ -14,9 +27,9 @@
             android:textColor="@android:color/primary_text_light"
             android:textSize="22sp"
             tools:text="Repo Name"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/repo_star_count"/>
 
     <ImageView
             android:id="@+id/repo_star_image"
