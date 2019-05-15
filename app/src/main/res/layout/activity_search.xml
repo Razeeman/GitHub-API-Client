@@ -19,7 +19,7 @@
                 android:layout_height="match_parent">
 
             <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/main_items"
+                    android:id="@+id/search_items"
                     android:layout_height="0dp"
                     android:layout_width="0dp"
                     android:layout_margin="8dp"
@@ -30,10 +30,10 @@
                     app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
-                    android:id="@+id/main_error"
+                    android:id="@+id/search_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="Error"
+                    tools:text="Message"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"

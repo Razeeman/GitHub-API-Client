@@ -16,7 +16,7 @@ import com.razeeman.showcase.githubapi.ui.RepoAdapter
 import com.razeeman.showcase.githubapi.ui.model.RepoItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_search.*
 import javax.inject.Inject
 
 /**
@@ -38,14 +38,14 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         App.getSearchComponent().inject(this)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_search)
 
         // Setting up the toolbar.
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         // Setting up recycler view.
-        main_items.apply {
+        search_items.apply {
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             layoutManager = LinearLayoutManager(context)
             adapter = repoAdapter
@@ -87,13 +87,13 @@ class SearchActivity : AppCompatActivity() {
         return true
     }
 
-    private fun setUpSearchView(searchItem: MenuItem?) {
-        val searchView = searchItem?.actionView as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+    private fun setUpSearchView(searchMenuItem: MenuItem?) {
+        val searchMenuView = searchMenuItem?.actionView as SearchView
+        searchMenuView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null && query.isNotEmpty()) {
                     searchViewModel.refreshRepos(query)
-                    searchItem.collapseActionView()
+                    searchMenuItem.collapseActionView()
                 }
                 return false
             }
@@ -118,7 +118,7 @@ class SearchActivity : AppCompatActivity() {
         compositeDisposable.add(searchViewModel.getReposSubject()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { if (it.isEmpty()) showError("No results") else showItems(it) },
+                { if (it.isEmpty()) showMessage("No results") else showItems(it) },
                 { Log.d(TAG, "Error showing items", it) }
             ))
 
@@ -136,17 +136,17 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showItems(items: List<RepoItem>) {
-        main_items.visibility = View.VISIBLE
-        main_error.visibility = View.INVISIBLE
+        search_items.visibility = View.VISIBLE
+        search_message.visibility = View.INVISIBLE
 
         repoAdapter.replaceItems(items)
     }
 
-    private fun showError(message: String?) {
-        main_items.visibility = View.INVISIBLE
-        main_error.visibility = View.VISIBLE
+    private fun showMessage(message: String?) {
+        search_items.visibility = View.INVISIBLE
+        search_message.visibility = View.VISIBLE
 
-        main_error.text = message
+        search_message.text = message
     }
 
     private fun setLoadingVisibility(visibility: Boolean) {
