@@ -92,7 +92,7 @@ class SearchActivity : AppCompatActivity() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null && query.isNotEmpty()) {
-                    refreshData(query)
+                    searchViewModel.refreshRepos(query)
                     searchItem.collapseActionView()
                 }
                 return false
@@ -107,7 +107,7 @@ class SearchActivity : AppCompatActivity() {
         refresh_layout.apply {
             setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
             setOnRefreshListener {
-                refreshData()
+                searchViewModel.refreshRepos()
             }
         }
     }
@@ -118,8 +118,8 @@ class SearchActivity : AppCompatActivity() {
         compositeDisposable.add(searchViewModel.getReposSubject()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { showItems(it) },
-                { showError(it.message) }
+                { if (it.isEmpty()) showError("No results") else showItems(it) },
+                { Log.d(TAG, "Error showing items", it) }
             ))
 
         compositeDisposable.add(searchViewModel.getLoadingIndicatorSubject()
@@ -132,12 +132,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun unbindViewModel() {
         compositeDisposable.dispose()
-    }
-
-    private fun refreshData(query: String? = null) {
-        compositeDisposable.add(searchViewModel.refreshRepos(query)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe())
+        searchViewModel.clear()
     }
 
     private fun showItems(items: List<RepoItem>) {

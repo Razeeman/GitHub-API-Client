@@ -1,7 +1,6 @@
 package com.razeeman.showcase.githubapi.ui.search
 
 import com.razeeman.showcase.githubapi.ui.model.RepoItem
-import io.reactivex.Completable
 import io.reactivex.Observable
 
 /**
@@ -17,6 +16,8 @@ interface BaseSearchViewModel {
 
     fun getRepos()
 
-    fun refreshRepos(query: String?): Completable
+    fun refreshRepos(query: String? = null)
+
+    fun clear()
 
 }

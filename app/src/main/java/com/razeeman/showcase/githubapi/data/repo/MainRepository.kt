@@ -40,6 +40,7 @@ private constructor(private val localRepository: LocalRepository,
                 })
             .filter { it.isNotEmpty() }
             .firstElement()
+            .defaultIfEmpty(ArrayList())
             .toSingle()
     }
 
