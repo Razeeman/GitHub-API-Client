@@ -17,6 +17,8 @@ class SearchViewModel
 @Inject constructor(private val repository: BaseRepository)
     : BaseSearchViewModel {
 
+    override var searchQuery = "github api client"
+
     private val reposSubject = BehaviorSubject.create<List<RepoItem>>()
     private val loadingIndicatorSubject = BehaviorSubject.createDefault(false)
 
@@ -28,8 +30,8 @@ class SearchViewModel
         return loadingIndicatorSubject
     }
 
-    override fun getRepos(query: String) {
-        repository.getRepos(query)
+    override fun getRepos() {
+        repository.getRepos(searchQuery)
             .observeOn(Schedulers.computation())
             .map {
                 it.map { repoDb -> RepoItem.fromRepoDb(repoDb) }
@@ -40,10 +42,11 @@ class SearchViewModel
             .subscribe()
     }
 
-    override fun refreshRepos(query: String): Completable {
-        return repository.refreshRepos(query)
+    override fun refreshRepos(query: String?): Completable {
+        if (query != null) searchQuery = query
+        return repository.refreshRepos(searchQuery)
             .doOnSubscribe { loadingIndicatorSubject.onNext(true) }
-            .doFinally { getRepos(query) }
+            .doFinally { getRepos() }
     }
 
 }

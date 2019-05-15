@@ -32,7 +32,6 @@ class SearchActivity : AppCompatActivity() {
     @Inject
     lateinit var searchViewModel: BaseSearchViewModel
 
-    private var baseQuery = "github api client"
     private var compositeDisposable = CompositeDisposable()
     private val repoAdapter = RepoAdapter()
 
@@ -54,9 +53,10 @@ class SearchActivity : AppCompatActivity() {
 
         setUpRefreshLayout()
 
-        baseQuery = savedInstanceState?.getString(BASE_QUERY_STATE_KEY) ?: baseQuery
+        searchViewModel.searchQuery =
+            savedInstanceState?.getString(BASE_QUERY_STATE_KEY) ?: searchViewModel.searchQuery
 
-        searchViewModel.getRepos(baseQuery)
+        searchViewModel.getRepos()
     }
 
     override fun onResume() {
@@ -70,7 +70,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putString(BASE_QUERY_STATE_KEY, baseQuery)
+        outState.putString(BASE_QUERY_STATE_KEY, searchViewModel.searchQuery)
         super.onSaveInstanceState(outState)
     }
 
@@ -91,9 +91,8 @@ class SearchActivity : AppCompatActivity() {
         val searchView = searchItem?.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if (query != null) {
-                    baseQuery = query
-                    refreshData(baseQuery)
+                if (query != null && query.isNotEmpty()) {
+                    refreshData(query)
                     searchItem.collapseActionView()
                 }
                 return false
@@ -108,7 +107,7 @@ class SearchActivity : AppCompatActivity() {
         refresh_layout.apply {
             setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
             setOnRefreshListener {
-                refreshData(baseQuery)
+                refreshData()
             }
         }
     }
@@ -135,7 +134,7 @@ class SearchActivity : AppCompatActivity() {
         compositeDisposable.dispose()
     }
 
-    private fun refreshData(query: String) {
+    private fun refreshData(query: String? = null) {
         compositeDisposable.add(searchViewModel.refreshRepos(query)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe())

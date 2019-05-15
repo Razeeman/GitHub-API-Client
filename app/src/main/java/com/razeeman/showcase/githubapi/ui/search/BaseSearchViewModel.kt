@@ -9,12 +9,14 @@ import io.reactivex.Observable
  */
 interface BaseSearchViewModel {
 
+    var searchQuery: String
+
     fun getReposSubject(): Observable<List<RepoItem>>
 
     fun getLoadingIndicatorSubject(): Observable<Boolean>
 
-    fun getRepos(query: String)
+    fun getRepos()
 
-    fun refreshRepos(query: String): Completable
+    fun refreshRepos(query: String?): Completable
 
 }
